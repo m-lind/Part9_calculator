@@ -17,7 +17,7 @@ const parseArguments = (args: string[]): BodyValues => {
   }
 };
 
-const calculateBmi = (h: number, w: number) => {
+export const calculateBmi = (h: number, w: number) => {
   if (h === 0 || w === 0) throw new Error("Height and/or weight can't be 0!");
   const heightInMeters = h / 100;
   const bmi = w / (heightInMeters * heightInMeters);
@@ -41,13 +41,15 @@ const calculateBmi = (h: number, w: number) => {
   }
 };
 
-try {
-  const { height, weight } = parseArguments(process.argv);
-  console.log(calculateBmi(height, weight));
-} catch (error: unknown) {
-  let errorMessage = "Something bad happened.";
-  if (error instanceof Error) {
-    errorMessage += " Error: " + error.message;
+if (require.main === module) {
+  try {
+    const { height, weight } = parseArguments(process.argv);
+    console.log(calculateBmi(height, weight));
+  } catch (error: unknown) {
+    let errorMessage = "Something bad happened.";
+    if (error instanceof Error) {
+      errorMessage += " Error: " + error.message;
+    }
+    console.log(errorMessage);
   }
-  console.log(errorMessage);
 }
