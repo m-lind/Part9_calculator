@@ -13,6 +13,8 @@ interface ITargetAndHours {
   target: number;
 }
 
+export type hours = string[];
+
 const parseExerciseArguments = (args: string[]): ITargetAndHours => {
   if (args.length < 4) throw new Error("Not enough arguments");
   const hourArgs = args.slice(3);
@@ -38,7 +40,10 @@ const parseExerciseArguments = (args: string[]): ITargetAndHours => {
   };
 };
 
-const calculateExercises = (target: number, hours: number[]): IResult => {
+export const calculateExercises = (
+  target: number,
+  hours: number[]
+): IResult => {
   const trainingDaysArray = hours.filter(hoursPerDay => hoursPerDay !== 0);
   const sumOfHours = hours.reduce((sum, dailyHours) => sum + dailyHours, 0);
   const averageHours = sumOfHours / hours.length;
@@ -79,13 +84,15 @@ const calculateExercises = (target: number, hours: number[]): IResult => {
   };
 };
 
-try {
-  const { target, hours } = parseExerciseArguments(process.argv);
-  console.log(calculateExercises(target, hours));
-} catch (error: unknown) {
-  let errorMessage = "Something bad happened.";
-  if (error instanceof Error) {
-    errorMessage += " Error: " + error.message;
+if (require.main === module) {
+  try {
+    const { target, hours } = parseExerciseArguments(process.argv);
+    console.log(calculateExercises(target, hours));
+  } catch (error: unknown) {
+    let errorMessage = "Something bad happened.";
+    if (error instanceof Error) {
+      errorMessage += " Error: " + error.message;
+    }
+    console.log(errorMessage);
   }
-  console.log(errorMessage);
 }
